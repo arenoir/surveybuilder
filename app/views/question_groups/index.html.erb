@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Question Groups</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Theme</th>
+      <th>Content</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @question_groups.each do |question_group| %>
+      <tr>
+        <td><%= question_group.theme %></td>
+        <td><%= question_group.content %></td>
+        <td><%= link_to 'Show', question_group %></td>
+        <td><%= link_to 'Edit', edit_question_group_path(question_group) %></td>
+        <td><%= link_to 'Destroy', question_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Question group', new_question_group_path %>

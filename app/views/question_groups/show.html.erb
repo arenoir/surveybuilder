@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Theme:</strong>
+  <%= @question_group.theme %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @question_group.content %>
+</p>
+
+<%= link_to 'Edit', edit_question_group_path(@question_group) %> |
+<%= link_to 'Back', question_groups_path %>

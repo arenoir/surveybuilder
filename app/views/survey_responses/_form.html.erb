@@ -1,0 +1,65 @@
+<%= form_for(@survey_response) do |f| %>
+  <% if @survey_response.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@survey_response.errors.count, "error") %> prohibited this survey_response from being saved:</h2>
+
+      <ul>
+      <% @survey_response.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :survey_id %><br>
+    <%= f.collection_select(:survey_id, Survey.all, :id, :name, { prompt: true }, { disabled: @survey_response.persisted?}) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :participant_type %><br>
+    <%= f.select :participant_type, SurveyResponse::PARTICIPANT_TYPES, {prompt: true} %>
+  </div>
+
+  <div class="field">
+    <%= f.label :participant_id %><br>
+    <%= f.text_field :participant_id %>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th>Answer</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <% @survey_response.editable_question_reponses_by_group.each do |group, question_responses| %>
+        <tr>
+            <th colspan="2"><%= group.content %></th>
+        </tr>
+
+        <% question_responses.each do |question_response| %>
+          <%= f.fields_for :question_responses, question_response do |ff| %>
+            <tr>
+              <td>
+                <%= ff.object.question.content %>
+                <%= ff.hidden_field :id %>
+                <%= ff.hidden_field :question_id %>
+              </td>
+              <td>
+                <%= ff.number_field :answer, max: 4, min:0 %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
