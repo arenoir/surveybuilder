@@ -2,30 +2,46 @@
 
 <h1>Listing Survey Responses</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Survey</th>
-      <th>Participant Id</th>
-      <th>Participant Type</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @survey_responses.each do |survey_response| %>
-      <tr>
-        <td><%= survey_response.survey.name %></td>
-        <td><%= survey_response.participant_id %></td>
-        <td><%= survey_response.participant_type %></td>
-        <td><%= link_to 'Show', survey_response %></td>
-        <td><%= link_to 'Edit', edit_survey_response_path(survey_response) %></td>
-        <td><%= link_to 'Destroy', survey_response, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<div class="row">
+  <div class="col-sm-6">
+    <%= render 'filter_form' %>
+  </div>
+  <div class="col-sm-6">
+    <% if @bar_chart_data %>
+      <%= bar_chart @bar_chart_data %>
     <% end %>
-  </tbody>
-</table>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col-sm-12">
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Survey</th>
+          <th>Participant Id</th>
+          <th>Participant Type</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @survey_responses.each do |survey_response| %>
+          <tr>
+            <td><%= survey_response.survey.name %></td>
+            <td><%= survey_response.participant_id %></td>
+            <td><%= survey_response.participant_type %></td>
+            <td><%= link_to 'Show', survey_response %></td>
+            <td><%= link_to 'Edit', edit_survey_response_path(survey_response) %></td>
+            <td><%= link_to 'Destroy', survey_response, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
 <br>
 
 <%= link_to 'New Survey response', new_survey_response_path %>

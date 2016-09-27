@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Crises</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Country</th>
+      <th>Date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @crises.each do |crisis| %>
+      <tr>
+        <td><%= crisis.name %></td>
+        <td><%= crisis.country %></td>
+        <td><%= crisis.date %></td>
+        <td><%= link_to 'Show', crisis %></td>
+        <td><%= link_to 'Edit', edit_crisis_path(crisis) %></td>
+        <td><%= link_to 'Destroy', crisis, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Crisis', new_crisis_path %>

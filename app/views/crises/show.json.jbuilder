@@ -1,0 +1,1 @@
+json.partial! "crises/crisis", crisis: @crisis

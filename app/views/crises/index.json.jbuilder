@@ -1,0 +1,1 @@
+json.array! @crises, partial: 'crises/crisis', as: :crisis

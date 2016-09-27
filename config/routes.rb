@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
+  resources :crises
   resources :surveys
   resources :survey_responses
   resources :questions
   resources :question_responses
   resources :question_groups
+  resources :survey_response_filters
+  resources :question_response_filters
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

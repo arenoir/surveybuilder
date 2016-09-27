@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @crisis.name %>
+</p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @crisis.country %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @crisis.date %>
+</p>
+
+<%= link_to 'Edit', edit_crisis_path(@crisis) %> |
+<%= link_to 'Back', crises_path %>

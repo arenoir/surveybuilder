@@ -2,32 +2,49 @@
 
 <h1>Listing Question Responses</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Survey response</th>
-      <th>Question</th>
-      <th>Answer</th>
-      <th>Answer Type</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @question_responses.each do |question_response| %>
-      <tr>
-        <td><%= question_response.survey_response %></td>
-        <td><%= question_response.question %></td>
-        <td><%= question_response.answer %></td>
-        <td><%= question_response.answer_type %></td>
-        <td><%= link_to 'Show', question_response %></td>
-        <td><%= link_to 'Edit', edit_question_response_path(question_response) %></td>
-        <td><%= link_to 'Destroy', question_response, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<div class="row">
+  <div class="col-sm-6">
+    <%= render 'filter_form' %>
+  </div>
+  <div class="col-sm-6">
+    <% if @bar_chart_data %>
+      <%= bar_chart @bar_chart_data %>
     <% end %>
-  </tbody>
-</table>
+  </div>
+</div>
 
-<br>
 
-<%= link_to 'New Question response', new_question_response_path %>
+<div class="row">
+  <div class="col-sm-12">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Survey</th>
+          <th>Participant</th>
+          <th>Crisis</th>
+          <th>Question</th>
+          <th>Answer</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @question_responses.each do |question_response| %>
+          <tr>
+            <td><%= question_response.survey_response.survey.name %></td>
+            <td><%= question_response.survey_response.participant_type %></td>
+            <td><%= question_response.survey_response.crisis.label %></td>
+            <td><%= question_response.question.content %></td>
+            <td><%= question_response.answer %></td>
+            <td><%= link_to 'Show', question_response %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <br>
+
+    <%= link_to 'New Question response', new_question_response_path %>
+  </div>
+</div>

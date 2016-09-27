@@ -1,6 +1,7 @@
-<%= form_for(@survey_response) do |f| %>
+<%= bootstrap_form_for( @survey_response ) do |f| %>
+
   <% if @survey_response.errors.any? %>
-    <div id="error_explanation">
+    <div class="alert alert-danger" role="alert">
       <h2><%= pluralize(@survey_response.errors.count, "error") %> prohibited this survey_response from being saved:</h2>
 
       <ul>
@@ -11,55 +12,136 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :survey_id %><br>
-    <%= f.collection_select(:survey_id, Survey.all, :id, :name, { prompt: true }, { disabled: @survey_response.persisted?}) %>
+
+  <div class="row">
+    <div class="col-sm-6">
+
+
+      <%= f.collection_select(:survey_id, Survey.all, :id, :name, { prompt: true }, { disabled: @survey_response.persisted?, class: "form-control"}) %>
+
+
+      <%= f.collection_select(:crisis_id, Crisis.all, :id, :label, { prompt: true }, { disabled: @survey_response.persisted?, class: "form-control"}) %>
+
+      <%= f.select :participant_type, SurveyResponse::PARTICIPANT_TYPES, {prompt: true }, {class: "form-control"} %>
+
+      <%= f.text_field :participant_id, class: "form-control"%>
+    </div>
+
+    <div class="col-sm-6">
+
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" id="location_search" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <div id="location-chooser" style="width:100%;height:200px">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-6">
+          <%= f.text_field :latitude, class: "form-control" %>
+        </div>
+        <div class="col-sm-6">
+          <%= f.text_field :longitude, class: "form-control" %>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :participant_type %><br>
-    <%= f.select :participant_type, SurveyResponse::PARTICIPANT_TYPES, {prompt: true} %>
-  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <h3>Questions</h3>
 
-  <div class="field">
-    <%= f.label :participant_id %><br>
-    <%= f.text_field :participant_id %>
-  </div>
+      <table class="table table-bordered">
 
-  <table>
-    <thead>
-      <tr>
-        <th>Question</th>
-        <th>Answer</th>
-      </tr>
-    </thead>
+        <thead>
+          <tr>
+            <th colspan="2">Question</th>
+            <th>Answer</th>
+          </tr>
+        </thead>
 
-    <tbody>
+        <tbody>
 
-      <% @survey_response.editable_question_reponses_by_group.each do |group, question_responses| %>
-        <tr>
-            <th colspan="2"><%= group.content %></th>
-        </tr>
-
-        <% question_responses.each do |question_response| %>
-          <%= f.fields_for :question_responses, question_response do |ff| %>
+          <% @survey_response.editable_question_reponses_by_group.each do |group, question_responses| %>
             <tr>
-              <td>
-                <%= ff.object.question.content %>
-                <%= ff.hidden_field :id %>
-                <%= ff.hidden_field :question_id %>
-              </td>
-              <td>
-                <%= ff.number_field :answer, max: 4, min:0 %>
-              </td>
+                <th colspan="3"><%= group.content %></th>
             </tr>
-          <% end %>
-        <% end %>
-      <% end %>
-    </tbody>
-  </table>
 
-  <div class="actions">
-    <%= f.submit %>
+            <% question_responses.each do |question_response| %>
+              <%= f.fields_for :question_responses, question_response do |ff| %>
+                <tr>
+                  <th><%= ff.object.question.number %></th>
+                  <td>
+                    <%= ff.object.question.content %>
+                    <%= ff.hidden_field :id %>
+                    <%= ff.hidden_field :question_id %>
+                  </td>
+                  <td>
+                    <%= ff.number_field :answer, max: 4, min:0 %>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <%= f.submit %>
+    </div>
   </div>
 <% end %>
+
+<script>
+  var latitude = "<%= @survey_response.latitude %>"
+  var longitude = "<%= @survey_response.longitude %>"
+
+
+  function success(position){
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+    initChooser();
+  }
+
+  function fail(){}
+
+  function initChooser() {
+    $('#location-chooser').locationpicker({
+      radius: 300,
+      enableAutocomplete: true,
+      location: {
+          latitude: latitude,
+          longitude: longitude
+      },
+      inputBinding: {
+        latitudeInput: $('#survey_response_latitude'),
+        longitudeInput: $('#survey_response_longitude'),
+        radiusInput: $('#survey_response_radius'),
+        locationNameInput: $('#location_search')
+      }
+    });
+  }
+
+  if (latitude === "") {
+    if (navigator.geolocation) {
+      // Call getCurrentPosition with success and failure callbacks
+      navigator.geolocation.getCurrentPosition( success, fail );
+    } else {
+      initChooser();
+    }
+  } else {
+    initChooser();
+  }
+
+
+
+
+
+
+</script>

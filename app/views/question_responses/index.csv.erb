@@ -1,0 +1,12 @@
+<%- headers = ['Survey', 'Participant Type', 'Participant Id', 'Question Group', 'Question', 'Answer'] -%>
+<%= CSV.generate_line headers %>
+<%- @question_responses.each do |qr| -%>
+<%= CSV.generate_line([
+  qr.survey_response.survey.name, 
+  qr.survey_response.participant_type, 
+  qr.survey_response.participant_id,
+  qr.question.question_group.content.gsub!(/[^0-9A-Za-z]/, ' '),
+  qr.question.content.gsub!(/[^0-9A-Za-z]/, ' '),
+  qr.answer
+]) -%>
+<%- end -%>

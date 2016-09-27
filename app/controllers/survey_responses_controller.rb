@@ -5,6 +5,31 @@ class SurveyResponsesController < ApplicationController
   # GET /survey_responses.json
   def index
     @survey_responses = SurveyResponse.all
+    @survey_response_filter = SurveyResponseFilter.new
+
+    @bar_chart_data = []
+    groups = []
+    QuestionResponse.question_id(36).group_by {|qr| qr.participant_type }.each do |group, questions| 
+      groups << group
+      @bar_chart_data << [group, questions.size]
+    end
+    # puts "test"
+    @bar_chart_data.unshift(groups)
+
+    puts @bar_chart_data
+
+    @lines = @survey_responses.map { |sr| 
+      [[sr.survey.name, sr.participant_type, sr.participant_id] + sr.question_responses.map { |q| q.answer.to_i }].flatten
+    }
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"survey-responses.csv\""
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
+
   end
 
   # GET /survey_responses/1
@@ -69,6 +94,13 @@ class SurveyResponsesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def survey_response_params
-      params.require(:survey_response).permit(:survey_id, :participant_id, :participant_type, :question_responses_attributes => [:id, :question_id, :answer])
+      params.require(:survey_response).permit(
+        :survey_id, 
+        :crisis_id,
+        :latitude,
+        :longitude,
+        :participant_id, 
+        :participant_type, 
+        :question_responses_attributes => [:id, :question_id, :answer])
     end
 end

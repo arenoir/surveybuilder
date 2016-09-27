@@ -1,3 +1,4 @@
+require 'csv'
 class QuestionResponsesController < ApplicationController
   before_action :set_question_response, only: [:show, :edit, :update, :destroy]
 
@@ -5,6 +6,26 @@ class QuestionResponsesController < ApplicationController
   # GET /question_responses.json
   def index
     @question_responses = QuestionResponse.all
+    @question_response_filter = QuestionResponseFilter.new
+
+    @bar_chart_data = []
+    groups = []
+    QuestionResponse.question_id(36).group_by {|qr| qr.participant_type }.each do |group, questions| 
+      groups << group
+      @bar_chart_data << [group, questions.size]
+    end
+    # puts "test"
+    @bar_chart_data.unshift(groups)
+
+    puts @bar_chart_data
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"user-list\""
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
   end
 
   # GET /question_responses/1
@@ -62,6 +83,7 @@ class QuestionResponsesController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_question_response
       @question_response = QuestionResponse.find(params[:id])

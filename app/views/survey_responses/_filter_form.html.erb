@@ -1,0 +1,8 @@
+<%= bootstrap_form_for( @survey_response_filter ) do |f| %>
+  <%= f.collection_select(:survey_id, Survey.all, :id, :name, { prompt: true }) %>
+
+  <%= f.collection_select(:crisis_id, Crisis.all, :id, :label, { prompt: true }) %>
+
+  <%= f.submit "Update Filter"%>
+
+<% end %>
