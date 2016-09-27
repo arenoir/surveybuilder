@@ -15,6 +15,14 @@ class QuestionResponse < ActiveRecord::Base
     joins(:question).where(questions: {id: question_id}) 
   }
 
+  scope :survey_id, ->(_id) { 
+    joins(:survey_response).where(survey_responses: {survey_id: _id}) 
+  }
+
+  scope :crisis_id, ->(_id) { 
+    joins(:survey_response).where(survey_responses: {crisis_id: _id}) 
+  }
+
   def question_group
     question.question_group
   end

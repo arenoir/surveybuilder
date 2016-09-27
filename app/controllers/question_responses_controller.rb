@@ -1,16 +1,19 @@
 require 'csv'
 class QuestionResponsesController < ApplicationController
   before_action :set_question_response, only: [:show, :edit, :update, :destroy]
-
+  has_scope :question_id
+  has_scope :survey_id
+  has_scope :crisis_id
   # GET /question_responses
   # GET /question_responses.json
   def index
-    @question_responses = QuestionResponse.all
+    collection = apply_scopes(QuestionResponse)
+    @question_responses = collection.all
     @question_response_filter = QuestionResponseFilter.new
 
     @bar_chart_data = []
     groups = []
-    QuestionResponse.question_id(36).group_by {|qr| qr.participant_type }.each do |group, questions| 
+    collection.group_by {|qr| qr.participant_type }.each do |group, questions| 
       groups << group
       @bar_chart_data << [group, questions.size]
     end
