@@ -1,5 +1,5 @@
 class CreateApplicationTables < ActiveRecord::Migration[5.0]
- create_table "crises", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+ create_table "crises" do |t|
     t.integer  "user_id"
     t.string   "name"
     t.string   "country"
@@ -8,7 +8,7 @@ class CreateApplicationTables < ActiveRecord::Migration[5.0]
     t.datetime "updated_at", null: false
   end
 
-  create_table "question_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "question_groups" do |t|
     t.string   "theme"
     t.text     "content",    limit: 65535
     t.datetime "created_at",               null: false
@@ -16,7 +16,7 @@ class CreateApplicationTables < ActiveRecord::Migration[5.0]
     t.integer  "user_id"
   end
 
-  create_table "question_responses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "question_responses" do |t|
     t.integer  "survey_response_id"
     t.integer  "question_id"
     t.string   "answer"
@@ -27,7 +27,7 @@ class CreateApplicationTables < ActiveRecord::Migration[5.0]
     t.index ["survey_response_id"], name: "index_question_responses_on_survey_response_id", using: :btree
   end
 
-  create_table "questions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "questions" do |t|
     t.integer  "survey_id"
     t.integer  "question_group_id"
     t.text     "content",           limit: 65535
@@ -43,7 +43,7 @@ class CreateApplicationTables < ActiveRecord::Migration[5.0]
     t.index ["survey_id"], name: "index_questions_on_survey_id", using: :btree
   end
 
-  create_table "survey_responses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "survey_responses" do |t|
     t.integer  "survey_id"
     t.string   "participant_id"
     t.string   "participant_type"
@@ -60,14 +60,14 @@ class CreateApplicationTables < ActiveRecord::Migration[5.0]
     t.index ["survey_id"], name: "index_survey_responses_on_survey_id", using: :btree
   end
 
-  create_table "surveys", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "surveys", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
