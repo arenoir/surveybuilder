@@ -38,6 +38,7 @@ gem 'googlecharts', '~> 1.6'
 gem 'lodash-rails', '4.16.1'
 gem 'numbers_and_words', '~> 0.10.5'
 
+gem 'seed_dump'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

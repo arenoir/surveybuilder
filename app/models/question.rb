@@ -13,7 +13,7 @@ class Question < ActiveRecord::Base
   validates :survey, presence: true
   validates :question_group, presence: true
   validates :answer_type, presence: true, :inclusion => { :in => ANSWER_TYPES }
-  validates :number, numericality: { only_integer: true, greater_than: 0}, uniqueness: { scope: :question_group_id}
+  validates :number, numericality: { only_integer: true, greater_than: 0 }, uniqueness: { scope: :survey_id}
 
 
   def boys_average
