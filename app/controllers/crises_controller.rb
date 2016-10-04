@@ -25,6 +25,7 @@ class CrisesController < ApplicationController
   # POST /crises.json
   def create
     @crisis = Crisis.new(crisis_params)
+    @crisis.user = current_user
 
     respond_to do |format|
       if @crisis.save

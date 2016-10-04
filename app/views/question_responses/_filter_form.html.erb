@@ -1,8 +1,23 @@
-<%= bootstrap_form_for( @question_response_filter ) do |f| %>
-  <%= f.collection_select(:survey_id, Survey.all, :id, :name, { prompt: true }) %>
+<%= bootstrap_form_for( @question_response_filter, as: '', url: question_responses_path, method: :get ) do |f| %>
+  <div class="row">
+    <div class="col-sm-6">
+      <%= f.collection_select(:survey_id, Survey.all, :id, :name, { include_blank: true }) %>
+      <%= f.collection_select(:crisis_id, Crisis.all, :id, :label, { include_blank: true }) %>
+    </div>
 
-  <%= f.collection_select(:crisis_id, Crisis.all, :id, :label, { prompt: true }) %>
+    <div class="col-sm-6">
+      <%= f.select(:question_ids, Question.all.collect {|q| [q.content, q.id]}, { include_blank: "All" }, { :multiple => true, class: 'chosen-select' }) %>
+    </div>
 
-  <%= f.submit "Update Filter"%>
+  </div>
 
+  <div class="row">
+    <div class="col-sm-6">
+      <%= f.submit "Update Filter"%>
+    </div>
+  </div>
 <% end %>
+
+
+
+

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'pg'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.6'
+gem 'rails', '5.0.0.1'
 # Use sqlite3 as the database for Active Record
 gem 'has_scope', '~> 0.7.0'
 
@@ -24,12 +24,19 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
+# authentication
+gem 'devise', '~> 4.2'
+gem 'omniauth', '~> 1.3', '>= 1.3.1'
 
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'bootstrap-datepicker-rails', '~> 1.6'
+gem 'bootstrap-chosen-rails', '~> 0.0.4'
+gem 'chosen-rails', '~> 1.5'
 gem 'chartkick', '~> 2.1'
 gem 'bootstrap_form', '~> 2.5'
 gem 'googlecharts', '~> 1.6'
+gem 'lodash-rails', '4.16.1'
+gem 'numbers_and_words', '~> 0.10.5'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

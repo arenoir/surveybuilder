@@ -1,4 +1,4 @@
-<%= form_for(@survey) do |f| %>
+<%= bootstrap_form_for(@survey) do |f| %>
   <% if @survey.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@survey.errors.count, "error") %> prohibited this survey from being saved:</h2>
@@ -11,10 +11,11 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
+  <%= f.text_field :name %>
+
+
+  <%= render 'questions_form', f: f %>
+
 
   <div class="actions">
     <%= f.submit %>

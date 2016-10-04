@@ -1,5 +1,6 @@
 class SurveyResponseFilter 
   include ActiveModel::AttributeMethods
+  include ActiveModel::AttributeAssignment
   include ActiveModel::Conversion
   extend  ActiveModel::Naming
 

@@ -16,15 +16,18 @@
   <div class="row">
     <div class="col-sm-6">
 
+      <%= f.collection_select(:survey_id, Survey.all, :id, :name, { prompt: true }, { disabled: is_survey_field_disabled?(editable: false), class: "form-control"}) %>
 
-      <%= f.collection_select(:survey_id, Survey.all, :id, :name, { prompt: true }, { disabled: @survey_response.persisted?, class: "form-control"}) %>
+      <%= f.collection_select(:crisis_id, Crisis.all, :id, :label, { prompt: true }, { disabled: is_survey_field_disabled?(editable: false), class: "form-control"}) %>
 
+      <%= f.select :participant_type, SurveyResponse::PARTICIPANT_TYPES, {prompt: true }, {disabled: is_survey_field_disabled?, class: "form-control"} %>
 
-      <%= f.collection_select(:crisis_id, Crisis.all, :id, :label, { prompt: true }, { disabled: @survey_response.persisted?, class: "form-control"}) %>
+      <%= f.text_field :participant_id, class: "form-control", disabled: is_survey_field_disabled? %>
 
-      <%= f.select :participant_type, SurveyResponse::PARTICIPANT_TYPES, {prompt: true }, {class: "form-control"} %>
+      <%= f.number_field :iteration, class: "form-control", disabled: is_survey_field_disabled? %>
+      
+      <%= f.date_field :date, class: "form-control", disabled: is_survey_field_disabled? %>
 
-      <%= f.text_field :participant_id, class: "form-control"%>
     </div>
 
     <div class="col-sm-6">
@@ -41,61 +44,66 @@
 
       <div class="form-group">
         <div class="col-sm-6">
-          <%= f.text_field :latitude, class: "form-control" %>
+          <%= f.text_field :latitude, class: "form-control", disabled: is_survey_field_disabled? %>
         </div>
         <div class="col-sm-6">
-          <%= f.text_field :longitude, class: "form-control" %>
+          <%= f.text_field :longitude, class: "form-control", disabled: is_survey_field_disabled? %>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-sm-12">
-      <h3>Questions</h3>
+  <% if @survey_response.persisted? %>
 
-      <table class="table table-bordered">
+    <div class="row">
+      <div class="col-sm-12">
+        <h3>Questions</h3>
 
-        <thead>
-          <tr>
-            <th colspan="2">Question</th>
-            <th>Answer</th>
-          </tr>
-        </thead>
+        <table class="table table-bordered">
 
-        <tbody>
-
-          <% @survey_response.editable_question_reponses_by_group.each do |group, question_responses| %>
+          <thead>
             <tr>
-                <th colspan="3"><%= group.content %></th>
+              <th colspan="2">Question</th>
+              <th>Answer</th>
             </tr>
+          </thead>
 
-            <% question_responses.each do |question_response| %>
-              <%= f.fields_for :question_responses, question_response do |ff| %>
-                <tr>
-                  <th><%= ff.object.question.number %></th>
-                  <td>
-                    <%= ff.object.question.content %>
-                    <%= ff.hidden_field :id %>
-                    <%= ff.hidden_field :question_id %>
-                  </td>
-                  <td>
-                    <%= ff.number_field :answer, max: 4, min:0 %>
-                  </td>
-                </tr>
+          <tbody>
+
+            <% @survey_response.editable_question_reponses_by_group.each do |group, question_responses| %>
+              <tr>
+                  <th colspan="3"><%= group.content %></th>
+              </tr>
+
+              <% question_responses.each do |question_response| %>
+                <%= f.fields_for :question_responses, question_response do |ff| %>
+                  <tr>
+                    <th><%= ff.object.question.number %></th>
+                    <td>
+                      <%= ff.object.question.content %>
+                      <%= ff.hidden_field :id %>
+                      <%= ff.hidden_field :question_id %>
+                    </td>
+                    <td>
+                      <%= ff.number_field :answer, max: 4, min:0, disabled: is_survey_field_disabled? %>
+                    </td>
+                  </tr>
+                <% end %>
               <% end %>
             <% end %>
-          <% end %>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm-12">
-      <%= f.submit %>
+  <% end %>
+  
+  <% unless is_survey_field_disabled? %>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= f.submit %>
+      </div>
     </div>
-  </div>
+  <% end %>
 <% end %>
 
 <script>
@@ -138,10 +146,5 @@
   } else {
     initChooser();
   }
-
-
-
-
-
 
 </script>

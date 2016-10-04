@@ -1,18 +1,31 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Listing Question Responses</h1>
 
-
 <div class="row">
-  <div class="col-sm-6">
-    <%= render 'filter_form' %>
-  </div>
-  <div class="col-sm-6">
-    <% if @bar_chart_data %>
-      <%= bar_chart @bar_chart_data %>
-    <% end %>
+  <div class="col-sm-12">
+    <%= link_to "Download CSV", {format:'csv', params: request.query_parameters } %>
+
+    <a class="btn btn-default pull-right" role="button" data-toggle="collapse" href="#filters" aria-expanded="false" aria-controls="collapseExample">
+      Filters
+    </a>
+
   </div>
 </div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="collapse" id="filters">
+      <br>
+      <div class="well">
+        <%= render 'filter_form' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<% if @answers_bar_charts %>
+  <%= render 'answers_bar_charts' %>
+<% end %>
 
 
 <div class="row">
@@ -23,9 +36,9 @@
           <th>Survey</th>
           <th>Participant</th>
           <th>Crisis</th>
+          <th>Response Date</th>
           <th>Question</th>
           <th>Answer</th>
-          <th></th>
         </tr>
       </thead>
 
@@ -35,9 +48,9 @@
             <td><%= question_response.survey_response.survey.name %></td>
             <td><%= question_response.survey_response.participant_type %></td>
             <td><%= question_response.survey_response.crisis.label %></td>
+            <td><%= question_response.survey_response.date %></td>
             <td><%= question_response.question.content %></td>
             <td><%= question_response.answer %></td>
-            <td><%= link_to 'Show', question_response %></td>
           </tr>
         <% end %>
       </tbody>
@@ -45,6 +58,6 @@
 
     <br>
 
-    <%= link_to 'New Question response', new_question_response_path %>
   </div>
 </div>
+

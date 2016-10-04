@@ -25,7 +25,8 @@ class QuestionGroupsController < ApplicationController
   # POST /question_groups.json
   def create
     @question_group = QuestionGroup.new(question_group_params)
-
+    @question_group.user = current_user
+    
     respond_to do |format|
       if @question_group.save
         format.html { redirect_to @question_group, notice: 'Question group was successfully created.' }

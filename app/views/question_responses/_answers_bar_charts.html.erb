@@ -1,0 +1,39 @@
+<div class="answers-bar-charts">
+  <% @answers_bar_charts.each_slice(2) do |c1, c2| %>
+    <div class="row">
+      <div class="col-sm-6">
+        <div id="answer-bar-chart-<%= c1 && c1[:id] %>"></div>
+      </div>
+      <div class="col-sm-6">
+        <div id="answer-bar-chart-<%= c2 && c2[:id] %>"></div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawCharts('<%== j @answers_bar_charts.to_json %>'));
+
+  function drawCharts(json) {
+    var charts = JSON.parse(json);
+
+    setTimeout(function() {
+      var vis = google.visualization;
+      
+      _.forEach(charts, function(chart) {  
+        var data = google.visualization.arrayToDataTable(chart.data)
+        var options = {
+          title : chart["title"],
+          vAxis: {title: 'Participants'},
+          hAxis: {title: 'Answer'},
+          seriesType: 'bars',
+          series: {4: {type: 'line'}}
+        }
+        var c = new google.visualization.ComboChart(document.getElementById('answer-bar-chart-' + chart["id"]));
+        c.draw(data, options);
+      });
+    }, 3000);
+  };
+
+</script>

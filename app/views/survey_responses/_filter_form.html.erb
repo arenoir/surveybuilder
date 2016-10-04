@@ -1,7 +1,7 @@
-<%= bootstrap_form_for( @survey_response_filter ) do |f| %>
-  <%= f.collection_select(:survey_id, Survey.all, :id, :name, { prompt: true }) %>
+<%= bootstrap_form_for( @survey_response_filter, as: '', url: survey_responses_path, method: :get ) do |f| %>
+  <%= f.collection_select(:survey_id, Survey.all, :id, :name, { include_blank: true }) %>
 
-  <%= f.collection_select(:crisis_id, Crisis.all, :id, :label, { prompt: true }) %>
+  <%= f.collection_select(:crisis_id, Crisis.all, :id, :label, { include_blank: true }) %>
 
   <%= f.submit "Update Filter"%>
 

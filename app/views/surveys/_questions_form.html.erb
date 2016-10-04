@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h3>Questions</h3>
+
+    <table class="table table-bordered">
+
+      <thead>
+        <tr>
+          <th colspan="2">Question</th>
+          <th>Answer</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <% @survey.questions.each do |question| %>
+          <%= f.fields_for :questions, question do |ff| %>
+            <tr>
+              <td><%= ff.text_field :number, hide_label: true %></td>
+              <td><%= ff.text_area :content, hide_label: true %></td>
+              <td><%= ff.collection_select(:question_group_id, QuestionGroup.all, :id, :content, prompt: true) %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

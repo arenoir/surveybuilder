@@ -4,12 +4,16 @@ class Question < ActiveRecord::Base
 
   belongs_to :survey
   belongs_to :question_group
+  
+  belongs_to :user
+  validates :user, presence: {strict: true}
 
   has_many :question_responses
 
   validates :survey, presence: true
   validates :question_group, presence: true
   validates :answer_type, presence: true, :inclusion => { :in => ANSWER_TYPES }
+  validates :number, numericality: { only_integer: true, greater_than: 0}, uniqueness: { scope: :question_group_id}
 
 
   def boys_average

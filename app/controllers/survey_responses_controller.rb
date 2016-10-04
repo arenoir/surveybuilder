@@ -1,26 +1,31 @@
 class SurveyResponsesController < ApplicationController
   before_action :set_survey_response, only: [:show, :edit, :update, :destroy]
-
+  has_scope :survey_id
+  has_scope :crisis_id
   # GET /survey_responses
   # GET /survey_responses.json
   def index
-    @survey_responses = SurveyResponse.all
-    @survey_response_filter = SurveyResponseFilter.new
+    @survey_responses = apply_scopes(SurveyResponse).includes([:user, :survey]).all
+    @survey_response_filter = SurveyResponseFilter.new()
+    @survey_response_filter.assign_attributes({
+      survey_id: params[:survey_id],
+      crisis_id: params[:crisis_id]
+    })
 
-    @bar_chart_data = []
-    groups = []
-    QuestionResponse.question_id(36).group_by {|qr| qr.participant_type }.each do |group, questions| 
-      groups << group
-      @bar_chart_data << [group, questions.size]
-    end
-    # puts "test"
-    @bar_chart_data.unshift(groups)
+    # @bar_chart_data = []
+    # groups = []
+    # QuestionResponse.question_id(36).group_by {|qr| qr.participant_type }.each do |group, questions| 
+    #   groups << group
+    #   @bar_chart_data << [group, questions.size]
+    # end
+    # # puts "test"
+    # @bar_chart_data.unshift(groups)
 
-    puts @bar_chart_data
+    # puts @bar_chart_data
 
-    @lines = @survey_responses.map { |sr| 
-      [[sr.survey.name, sr.participant_type, sr.participant_id] + sr.question_responses.map { |q| q.answer.to_i }].flatten
-    }
+    # @lines = @survey_responses.map { |sr| 
+    #   [[sr.survey.name, sr.participant_type, sr.participant_id] + sr.question_responses.map { |q| q.answer.to_i }].flatten
+    # }
 
     respond_to do |format|
       format.html
@@ -50,6 +55,7 @@ class SurveyResponsesController < ApplicationController
   # POST /survey_responses.json
   def create
     @survey_response = SurveyResponse.new(survey_response_params)
+    @survey_response.user = current_user
 
     respond_to do |format|
       if @survey_response.save
@@ -101,6 +107,8 @@ class SurveyResponsesController < ApplicationController
         :longitude,
         :participant_id, 
         :participant_type, 
+        :iteration,
+        :date,
         :question_responses_attributes => [:id, :question_id, :answer])
     end
 end

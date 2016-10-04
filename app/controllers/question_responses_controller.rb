@@ -4,28 +4,41 @@ class QuestionResponsesController < ApplicationController
   has_scope :question_id
   has_scope :survey_id
   has_scope :crisis_id
+  has_scope :question_ids, type: :array
   # GET /question_responses
   # GET /question_responses.json
   def index
-    collection = apply_scopes(QuestionResponse)
+    collection = apply_scopes(QuestionResponse).includes([:survey_response, :question])
     @question_responses = collection.all
     @question_response_filter = QuestionResponseFilter.new
 
-    @bar_chart_data = []
-    groups = []
-    collection.group_by {|qr| qr.participant_type }.each do |group, questions| 
-      groups << group
-      @bar_chart_data << [group, questions.size]
-    end
-    # puts "test"
-    @bar_chart_data.unshift(groups)
+    @question_response_filter.assign_attributes({
+      survey_id: params[:survey_id],
+      crisis_id: params[:crisis_id],
+      question_ids: params[:question_ids]
+    })
 
-    puts @bar_chart_data
+    participant_types = collection.all.sort_by(&:participant_type).group_by(&:participant_type).keys
+    labels = participant_types.dup.unshift("Answer")
+    
+    @answers_bar_charts = collection.all.group_by(&:question_id).map do |question_id, questions|
+      answers = questions.sort_by(&:answer).group_by(&:answer).map do |answer, _questions| 
+        [answer.to_i.to_words] + participant_types.map {|pt| _questions.find_all {|q| q.participant_type == pt}.size }
+      end
+
+      {
+        title: Question.find(question_id).content.html_safe,
+        id: question_id,
+        data: answers.unshift(labels)
+      }
+    end
+
+
 
     respond_to do |format|
       format.html
       format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"user-list\""
+        headers['Content-Disposition'] = "attachment; filename=\"question-responses.csv\""
         headers['Content-Type'] ||= 'text/csv'
       end
     end
@@ -49,6 +62,7 @@ class QuestionResponsesController < ApplicationController
   # POST /question_responses.json
   def create
     @question_response = QuestionResponse.new(question_response_params)
+    @question_response.user = current_user
 
     respond_to do |format|
       if @question_response.save

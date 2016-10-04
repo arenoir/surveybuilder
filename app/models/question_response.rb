@@ -2,6 +2,9 @@ class QuestionResponse < ActiveRecord::Base
   belongs_to :survey_response
   belongs_to :question
 
+  belongs_to :user
+  validates :user, presence: {strict: true}
+
   validates :survey_response, presence: true
   validates :question_group, presence: true
 
@@ -21,6 +24,10 @@ class QuestionResponse < ActiveRecord::Base
 
   scope :crisis_id, ->(_id) { 
     joins(:survey_response).where(survey_responses: {crisis_id: _id}) 
+  }
+
+  scope :question_ids, ->(_ids) {
+    joins(:question).where(questions: {id: _ids}) 
   }
 
   def question_group
