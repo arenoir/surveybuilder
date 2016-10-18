@@ -1,4 +1,4 @@
-<%= form_for(@question) do |f| %>
+<%= bootstrap_form_for(@question) do |f| %>
   <% if @question.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
@@ -11,34 +11,20 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :survey_id %><br>
-    <%= f.collection_select(:survey_id, Survey.all, :id, :name, prompt: true) %>
-  </div>
+  <%= f.number_field :number %>
 
-  <div class="field">
-    <%= f.label :question_group %><br>
-    <%= f.collection_select(:question_group_id, QuestionGroup.all, :id, :content, prompt: true) %>
-  </div>
-  <div class="field">
-    <%= f.label :content %><br>
-    <%= f.text_area :content %>
-  </div>
+  <%= f.collection_select(:survey_id, Survey.all, :id, :name, prompt: true) %>
 
-  <div class="field">
-    <%= f.label :answer_type %><br>
-    <%= f.select :answer_type, Question::ANSWER_TYPES, {prompt: true} %>
-  </div>
+  <%= f.collection_select(:question_group_id, QuestionGroup.all, :id, :content, prompt: true) %>
 
-  <div class="field">
-    <%= f.label :min_value %><br>
-    <%= f.number_field :min_value %>
-  </div>
+  <%= f.text_area :content %>
+  <%= f.text_area :note %>
 
-  <div class="field">
-    <%= f.label :max_value %><br>
-    <%= f.number_field :max_value %>
-  </div>
+  <%= f.select :answer_type, Question::ANSWER_TYPES, {prompt: true} %>
+
+  <%= f.number_field :min_value %>
+
+  <%= f.number_field :max_value %>
 
 
   <div class="actions">

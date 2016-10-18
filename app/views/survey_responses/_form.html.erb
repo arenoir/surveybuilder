@@ -20,9 +20,12 @@
 
       <%= f.collection_select(:crisis_id, Crisis.all, :id, :label, { prompt: true }, { disabled: is_survey_field_disabled?(editable: false), class: "form-control"}) %>
 
-      <%= f.select :participant_type, SurveyResponse::PARTICIPANT_TYPES, {prompt: true }, {disabled: is_survey_field_disabled?, class: "form-control"} %>
-
       <%= f.text_field :participant_id, class: "form-control", disabled: is_survey_field_disabled? %>
+
+      <%= f.select :participant_gender, SurveyResponse::PARTICIPANT_GENDERS, {prompt: true }, {disabled: is_survey_field_disabled?, class: "form-control"} %>
+
+      <%= f.number_field :participant_age, min: 0, max: 100, class: "form-control", disabled: is_survey_field_disabled? %>
+
 
       <%= f.number_field :iteration, class: "form-control", disabled: is_survey_field_disabled? %>
       
@@ -85,7 +88,10 @@
                       <%= ff.hidden_field :question_id %>
                     </td>
                     <td>
-                      <%= ff.number_field :answer, max: 4, min:0, disabled: is_survey_field_disabled? %>
+                      <%= ff.number_field :answer, max: ff.object.question.max_value, min:ff.object.question.min_value, disabled: is_survey_field_disabled? %>
+                      <% if ff.object.question.note %>
+                        <div class="survey_responses__form__question__note"><%== ff.object.question.note %></div>
+                      <% end %>
                     </td>
                   </tr>
                 <% end %>

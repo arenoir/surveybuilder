@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161003212300) do
+ActiveRecord::Schema.define(version: 20161018211621) do
 
   create_table "crises", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.integer  "user_id"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 20161003212300) do
     t.datetime "updated_at",                      null: false
     t.integer  "number"
     t.integer  "user_id"
+    t.text     "note",              limit: 65535
     t.index ["question_group_id"], name: "index_questions_on_question_group_id", using: :btree
     t.index ["survey_id"], name: "index_questions_on_survey_id", using: :btree
   end
@@ -60,8 +61,8 @@ ActiveRecord::Schema.define(version: 20161003212300) do
     t.integer  "survey_id"
     t.string   "participant_id"
     t.string   "participant_type"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.integer  "crisis_id"
     t.string   "orginisation_name"
     t.integer  "iteration"
@@ -69,6 +70,8 @@ ActiveRecord::Schema.define(version: 20161003212300) do
     t.string   "longitude"
     t.date     "date"
     t.integer  "user_id"
+    t.string   "participant_gender"
+    t.integer  "participant_age"
     t.index ["crisis_id"], name: "index_survey_responses_on_crisis_id", using: :btree
     t.index ["survey_id"], name: "index_survey_responses_on_survey_id", using: :btree
   end

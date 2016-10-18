@@ -45,6 +45,8 @@ class SurveyResponsesController < ApplicationController
   # GET /survey_responses/new
   def new
     @survey_response = SurveyResponse.new
+    @survey_response.date = Date.today
+    @survey_response.iteration = 1
   end
 
   # GET /survey_responses/1/edit
@@ -106,7 +108,8 @@ class SurveyResponsesController < ApplicationController
         :latitude,
         :longitude,
         :participant_id, 
-        :participant_type, 
+        :participant_gender, 
+        :participant_age, 
         :iteration,
         :date,
         :question_responses_attributes => [:id, :question_id, :answer])

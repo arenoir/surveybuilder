@@ -16,3 +16,13 @@
  *= require chosen
  *= require_self
  */
+
+.survey_responses {
+  &__form {
+    &__question {
+      &__note {
+        white-space: pre-wrap;
+      }
+    }
+  }
+}
