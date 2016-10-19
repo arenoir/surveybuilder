@@ -20,4 +20,7 @@ class User < ApplicationRecord
     email
   end
 
+
+  attr_accessor :current_password
+
 end
